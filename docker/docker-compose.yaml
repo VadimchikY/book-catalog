@@ -1,0 +1,54 @@
+version: "3.0"
+
+services:
+  database:
+    container_name: "database"
+    image: postgres:15.3
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=my_db
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata_app:/var/lib/postgresql/data
+
+  redis:
+    container_name: "redis"
+    image: redis:6.2-alpine
+    command: redis-server --save 20 1 --loglevel warning
+    ports:
+      - '6379:6379'
+    volumes:
+      - cache:/data
+
+  backend-app:
+    container_name: "backend-app"
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    restart: always
+    volumes:
+      - ../src:/home/my_user/src
+    ports:
+      - '8000:8000'
+    depends_on:
+      - database
+    env_file:
+      - ../.env
+
+  celery:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    env_file:
+      - ../env
+    container_name: celery_app
+    command: celery -A tasks:celery_app worker --loglevel=info
+    depends_on:
+      - redis
+
+volumes:
+  pgdata_app:
+  cache:
