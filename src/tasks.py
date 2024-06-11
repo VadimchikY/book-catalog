@@ -4,7 +4,7 @@ from book.repository import BookRepository
 from core.database_depends import get_db
 
 
-celery_app = Celery('tasks', broker='redis://localhost:6379/0')
+celery_app = Celery('tasks', broker='redis://redis:6379/0')
 
 
 @celery_app.task

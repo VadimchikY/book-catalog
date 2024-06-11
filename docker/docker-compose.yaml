@@ -43,7 +43,7 @@ services:
       context: ..
       dockerfile: docker/Dockerfile
     env_file:
-      - ../env
+      - ../.env
     container_name: celery_app
     command: celery -A tasks:celery_app worker --loglevel=info
     depends_on:
