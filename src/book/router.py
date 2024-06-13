@@ -46,4 +46,4 @@ async def update_genres_to_book(book_id: int, genre_list: GenreList, book_usecas
 
 @book_router.get("/{book_id}", response_model=ExtendBook)
 async def get_extend_book(book_id: int, book_usecase: BookUseCase = Depends(get_book_usecase)):
-    return await book_usecase.get_book(book_id)
+    return await book_usecase.get_extend_book(book_id)

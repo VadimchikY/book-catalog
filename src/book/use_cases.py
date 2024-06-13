@@ -3,6 +3,7 @@ from typing import List
 
 from book.repository import BookRepository
 from book.schemas import BookBase, Book, ReservationRequest
+from core.exceptions import RequestProcessingException
 from tasks import return_book_task
 
 
@@ -19,8 +20,8 @@ class BookUseCase:
     async def get_all_books(self):
         return await self.repo.get_all_books()
 
-    async def get_book(self, book_id: int):
-        return await self.repo.get_book(book_id)
+    async def get_extend_book(self, book_id: int):
+        return await self.repo.get_extend_book(book_id)
 
     async def delete_book(self, book_id: int):
         await self.repo.delete_book(book_id)
@@ -28,8 +29,10 @@ class BookUseCase:
     async def update_genres(self, book_id: int, genres: List):
         await self.repo.update_genres(book_id, genres)
 
-
     async def reserve_book(self, reservation: ReservationRequest):
+        book = await self.repo.get_book(reservation.book_id)
+        if book.user_id:
+            raise RequestProcessingException("Book already reserved!")
         eta = datetime.now() + timedelta(days=reservation.days)
         task = return_book_task.apply_async(args=[reservation.book_id], eta=eta)
         task_id = task.id
