@@ -10,5 +10,5 @@ def get_book_repository(db: AsyncSession = Depends(get_db)) -> BookRepository:
     return BookRepository(db)
 
 
-def get_book_usecase(repo: BookUseCase = Depends(get_book_repository)) -> BookUseCase:
+def get_book_usecase(repo: BookRepository = Depends(get_book_repository)) -> BookUseCase:
     return BookUseCase(repo)

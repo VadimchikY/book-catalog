@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 from author.schemas import Author
 from genre.schemas import Genre
+from user.schemas import User
 
 
 class BookBase(BaseModel):
@@ -11,15 +12,6 @@ class BookBase(BaseModel):
     price: float
     pages: int
     author_id: int
-    genres: List[int] = []
-
-
-class BookCreate(BookBase):
-    pass
-
-
-class BookUpdate(BookBase):
-    pass
 
 
 class DeleteBook(BaseModel):
@@ -29,9 +21,20 @@ class DeleteBook(BaseModel):
 class Book(BookBase):
     book_id: int
     user_id: Optional[int] = None
-    author: Author
-    genres: List[Genre] = []
     task_id: Optional[str] = None
+
+    class Config:
+        from_attributes=True
+
+
+class ExtendBook(BaseModel):
+    book_id: int
+    title: str
+    price: float
+    pages: int
+    author: Author
+    genres: List[Genre]
+    user: Optional[User] = None
 
     class Config:
         from_attributes=True
@@ -41,3 +44,7 @@ class ReservationRequest(BaseModel):
     user_id: int
     book_id: int
     days: int
+
+
+class GenreList(BaseModel):
+    genres: List[int]

@@ -10,5 +10,5 @@ def get_author_repository(db: AsyncSession = Depends(get_db)) -> AuthorRepositor
     return AuthorRepository(db)
 
 
-def get_author_usecase(repo: AuthorUseCase = Depends(get_author_repository)) -> AuthorUseCase:
+def get_author_usecase(repo: AuthorRepository = Depends(get_author_repository)) -> AuthorUseCase:
     return AuthorUseCase(repo)

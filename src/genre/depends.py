@@ -10,5 +10,5 @@ def get_genre_repository(db: AsyncSession = Depends(get_db)) -> GenreRepository:
     return GenreRepository(db)
 
 
-def get_genre_usecase(repo: GenreUseCase = Depends(get_genre_repository)) -> GenreUseCase:
+def get_genre_usecase(repo: GenreRepository = Depends(get_genre_repository)) -> GenreUseCase:
     return GenreUseCase(repo)

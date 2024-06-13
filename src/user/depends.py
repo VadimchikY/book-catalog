@@ -10,5 +10,5 @@ def get_user_repository(db: AsyncSession = Depends(get_db)) -> UserRepository:
     return UserRepository(db)
 
 
-def get_user_usecase(repo: UserUseCase = Depends(get_user_repository)) -> UserUseCase:
+def get_user_usecase(repo: UserRepository = Depends(get_user_repository)) -> UserUseCase:
     return UserUseCase(repo)

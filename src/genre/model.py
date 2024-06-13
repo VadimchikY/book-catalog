@@ -13,6 +13,7 @@ class Genre(Base):
 
     books: Mapped[List["Book"]] = relationship(back_populates="genres", secondary="books_genres")
 
+
 class BooksGenres(Base):
     __tablename__ = "books_genres"
     book_id: Mapped[int] = mapped_column(ForeignKey("books.book_id", ondelete="CASCADE"), primary_key=True)

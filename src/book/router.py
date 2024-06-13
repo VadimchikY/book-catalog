@@ -37,3 +37,13 @@ async def delete_book(book: DeleteBook, book_usecase: BookUseCase = Depends(get_
 @book_router.patch("/", response_model=Book)
 async def update_book(book: Book, book_usecase: BookUseCase = Depends(get_book_usecase)):
     return await book_usecase.update_book(book)
+
+
+@book_router.put("/{book_id}/genres/")
+async def update_genres_to_book(book_id: int, genre_list: GenreList, book_usecase: BookUseCase = Depends(get_book_usecase)):
+    await book_usecase.update_genres(book_id, genre_list.genres)
+
+
+@book_router.get("/{book_id}", response_model=ExtendBook)
+async def get_extend_book(book_id: int, book_usecase: BookUseCase = Depends(get_book_usecase)):
+    return await book_usecase.get_book(book_id)
