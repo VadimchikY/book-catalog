@@ -3,13 +3,16 @@
 ---
 Для запуска проекта:
 ---
+Создать файл .env в корне проекта и скопировать содержимое из env.example
+
+Запистить:\
 docker-compose -f docker/docker-compose.yaml up -d
 
 ---
 Для наката тестовых данных после запуска:
 ---
 Установить и активировать venv в корне, установить зависимости\
-pip install -r requirements.txt\
+pip install -r requirements.txt
 
 После запустить скрипт\
 python3 src/create_test_data.py 
