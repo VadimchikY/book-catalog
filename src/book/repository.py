@@ -110,16 +110,17 @@ class BookRepository:
             raise DatabaseException
 
     async def get_filtered_books(self, book_filter: BookFilter) -> List[Book]:
-        query = select(Book)
+        query = select(model.Book)
 
         if book_filter.author_ids:
-            query = query.where(Book.author_id.in_(book_filter.author_ids))
+            query = query.where(model.Book.author_id.in_(book_filter.author_ids))
         if book_filter.genre_ids:
-            query = query.join(Book.genres).where(Genre.genre_id.in_(book_filter.genre_ids))
+            query = query.join(model.Book.genres).where(Genre.genre_id.in_(book_filter.genre_ids))
         if book_filter.min_price is not None:
-            query = query.where(Book.price >= book_filter.min_price)
+            query = query.where(model.Book.price >= book_filter.min_price)
         if book_filter.max_price is not None:
-            query = query.where(Book.price <= book_filter.max_price)
+            query = query.where(model.Book.price <= book_filter.max_price)
 
-        result = self.db.execute(query).scalars().all()
-        return result
+        result = await self.db.execute(query)
+        books = [Book.from_orm(db_book) for db_book in result.scalars().all()]
+        return books

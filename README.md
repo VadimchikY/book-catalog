@@ -8,6 +8,10 @@ docker-compose -f docker/docker-compose.yaml up -d
 ---
 Для наката тестовых данных после запуска:
 ---
+Установить и активировать venv в корне, установить зависимости\
+pip install -r requirements.txt\
+
+После запустить скрипт\
 python3 src/create_test_data.py 
 
 ---

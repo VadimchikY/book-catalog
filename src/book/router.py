@@ -19,7 +19,7 @@ async def return_book(book_id: int, book_usecase: BookUseCase = Depends(get_book
     return {"message": "Book returned successfully"}
 
 
-@book_router.get("/filter_books", response_model=List[Book])
+@book_router.post("/filter_books", response_model=List[Book])
 async def get_filtered_books(book_filter: BookFilter, book_usecase: BookUseCase = Depends(get_book_usecase)):
     return await book_usecase.get_filtered_books(book_filter)
 
