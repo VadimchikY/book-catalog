@@ -24,7 +24,7 @@ class Book(BookBase):
     task_id: Optional[str] = None
 
     class Config:
-        from_attributes=True
+        from_attributes = True
 
 
 class ExtendBook(BaseModel):
@@ -37,7 +37,7 @@ class ExtendBook(BaseModel):
     user: Optional[User] = None
 
     class Config:
-        from_attributes=True
+        from_attributes = True
 
 
 class ReservationRequest(BaseModel):
@@ -48,3 +48,10 @@ class ReservationRequest(BaseModel):
 
 class GenreList(BaseModel):
     genres: List[int]
+
+
+class BookFilter(BaseModel):
+    author_ids: Optional[List[int]] = None
+    genre_ids: Optional[List[int]] = None
+    min_price: Optional[float] = None
+    max_price: Optional[float] = None

@@ -10,7 +10,7 @@ class SQLAlchemy:
     @classmethod
     def start(cls, db_url):
         try:
-            engine = create_async_engine(db_url, echo=True, future=True)
+            engine = create_async_engine(db_url, echo=False, future=True)
             async_session = async_sessionmaker(engine, expire_on_commit=False)
             return cls(async_session)
         except Exception:

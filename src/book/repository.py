@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload, joinedload
 
 from book import model
-from book.schemas import BookBase, Book, ExtendBook
+from book.schemas import BookBase, Book, ExtendBook, BookFilter
 from core.exceptions import DatabaseException
 from genre.model import Genre
 
@@ -108,3 +108,18 @@ class BookRepository:
             book.task_id = task_id
         except Exception:
             raise DatabaseException
+
+    async def get_filtered_books(self, book_filter: BookFilter) -> List[Book]:
+        query = select(Book)
+
+        if book_filter.author_ids:
+            query = query.where(Book.author_id.in_(book_filter.author_ids))
+        if book_filter.genre_ids:
+            query = query.join(Book.genres).where(Genre.genre_id.in_(book_filter.genre_ids))
+        if book_filter.min_price is not None:
+            query = query.where(Book.price >= book_filter.min_price)
+        if book_filter.max_price is not None:
+            query = query.where(Book.price <= book_filter.max_price)
+
+        result = self.db.execute(query).scalars().all()
+        return result

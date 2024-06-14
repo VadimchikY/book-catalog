@@ -4,7 +4,9 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 from core.db import Base
-
+from user.model import User
+from author.model import Author
+from genre.model import Genre
 
 
 class Book(Base):

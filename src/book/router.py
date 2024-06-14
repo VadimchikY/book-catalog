@@ -19,6 +19,11 @@ async def return_book(book_id: int, book_usecase: BookUseCase = Depends(get_book
     return {"message": "Book returned successfully"}
 
 
+@book_router.get("/filter_books", response_model=List[Book])
+async def get_filtered_books(book_filter: BookFilter, book_usecase: BookUseCase = Depends(get_book_usecase)):
+    return await book_usecase.get_filtered_books(book_filter)
+
+
 @book_router.get("/", response_model=List[Book])
 async def get_books(book_usecase: BookUseCase = Depends(get_book_usecase)):
     return await book_usecase.get_all_books()
@@ -47,3 +52,4 @@ async def update_genres_to_book(book_id: int, genre_list: GenreList, book_usecas
 @book_router.get("/{book_id}", response_model=ExtendBook)
 async def get_extend_book(book_id: int, book_usecase: BookUseCase = Depends(get_book_usecase)):
     return await book_usecase.get_extend_book(book_id)
+

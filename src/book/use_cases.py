@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from typing import List
 
 from book.repository import BookRepository
-from book.schemas import BookBase, Book, ReservationRequest
+from book.schemas import BookBase, Book, ReservationRequest, BookFilter
 from core.exceptions import RequestProcessingException
 from tasks import return_book_task
 
@@ -33,7 +33,7 @@ class BookUseCase:
         book = await self.repo.get_book(reservation.book_id)
         if book.user_id:
             raise RequestProcessingException("Book already reserved!")
-        eta = datetime.now() + timedelta(days=reservation.days)
+        eta = datetime.now() + timedelta(minutes=reservation.days)
         task = return_book_task.apply_async(args=[reservation.book_id], eta=eta)
         task_id = task.id
         await self.repo.reserve_book(reservation.book_id, reservation.user_id, task_id)
@@ -41,3 +41,6 @@ class BookUseCase:
     async def return_book(self, book_id: int):
         task_id = await self.repo.restore_user(book_id)
         return_book_task.AsyncResult(task_id).revoke()
+
+    async def get_filtered_books(self, book_filter: BookFilter):
+        return await self.repo.get_filtered_books(book_filter)
